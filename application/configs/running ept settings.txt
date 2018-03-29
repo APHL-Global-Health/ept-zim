@@ -1,0 +1,32 @@
+UPDATE `response_result_dts` SET `test_kit_name_1` = DEFAULT, `test_kit_name_2` = DEFAULT, `test_kit_name_3` = DEFAULT WHERE `shipment_map_id` > 770 AND `exp_date_3` <> '';
+UPDATE `response_result_dts` SET `test_kit_name_1` = DEFAULT WHERE `shipment_map_id` > 770 AND `lot_no_3`= '' AND `exp_date_3` = '0000-00-00' ;
+
+'RESET RECALCULATION FLAG FOR ALL PREVIOUSLY EXCLUDED SITES TO BE RE-EVALUATED (ESPECIALLY AFTER CORRECTING ERRORS)
+UPDATE `shipment_participant_map` SET `is_excluded`='no' WHERE `shipment_id` = 4;
+
+'CHECK FOR ALL FINAL RESULTS WHICH FAILED  BECAUSE OF 'INDETERMINATE  RESULTS', INCOMPLETE or NO CHEMBIO OR 'NOT TESTED' 
+SELECT DISTINCT `shipment_map_id`, `reported_result` FROM `response_result_dts` where `reported_result` >5 and `shipment_map_id`>770;
+
+' CHECK FOR EXCLUDED RESULTS AFTER RUNNING AN EVALUATION
+SELECT `map_id`, `shipment_id`, `participant_id`, `attributes`, `evaluation_status`, `shipment_score`, `documentation_score`,`final_result`, `failure_reason` FROM `shipment_participant_map` WHERE `shipment_id` = 4 AND `map_id` > 770 and `final_result`= 3
+
+'PUT DEFAULT VALUES FOR BLANKS
+
+UPDATE `response_result_dts` SET `test_kit_name_1` = DEFAULT WHERE `shipment_map_id` > 770 AND `lot_no_1`= '' AND `exp_date_1` = '0000-00-00' ;
+UPDATE `response_result_dts` SET `test_kit_name_2` = DEFAULT WHERE `shipment_map_id` > 770 AND `lot_no_2`= '' AND `exp_date_2` = '0000-00-00' ;
+UPDATE `response_result_dts` SET `test_kit_name_3` = DEFAULT WHERE `shipment_map_id` > 770 AND `lot_no_3`= '' AND `exp_date_3` = '0000-00-00' ;
+
+'REPLACE BLANK LOT CODES
+UPDATE `response_result_dts` SET `lot_no_1`= 'TEST1' WHERE `shipment_map_id` > 770 AND `lot_no_1`= '' AND `exp_date_1` <> '0000-00-00' ;
+UPDATE `response_result_dts` SET `lot_no_2`= 'TEST2' WHERE `shipment_map_id` > 770 AND `lot_no_2`= '' AND `exp_date_2` <> '0000-00-00' ;
+UPDATE `response_result_dts` SET `lot_no_3`= 'TEST3' WHERE `shipment_map_id` > 770 AND `lot_no_3`= '' AND `exp_date_3` <> '0000-00-00' ;
+
+'REPLACE BLANK DATES
+UPDATE `response_result_dts` SET `exp_date_1`= '2016-08-31' WHERE `shipment_map_id` > 770 AND `exp_date_1` = '0000-00-00' AND `lot_no_1` <> '' ;
+UPDATE `response_result_dts` SET `exp_date_2`= '2016-08-31' WHERE `shipment_map_id` > 770 AND `exp_date_2` = '0000-00-00' AND `lot_no_2` <> '' ;
+UPDATE `response_result_dts` SET `exp_date_3`= '2016-08-31' WHERE `shipment_map_id` > 770 AND `exp_date_3` = '0000-00-00' AND `lot_no_3` <> '' ;
+
+'Correct expired Dates
+UPDATE `response_result_dts` SET `exp_date_1`='2016-08-31' WHERE `exp_date_1` < '2016-07-20' and `shipment_map_id`>770 and `exp_date_1`<>'0000-00-00';
+UPDATE `response_result_dts` SET `exp_date_2`='2016-08-31' WHERE `exp_date_2` < '2016-07-20' and `shipment_map_id`>770 and `exp_date_2`<>'0000-00-00';
+UPDATE `response_result_dts` SET `exp_date_3`='2016-08-31' WHERE `exp_date_3` < '2016-07-20' and `shipment_map_id`>770 and `exp_date_3`<>'0000-00-00';
