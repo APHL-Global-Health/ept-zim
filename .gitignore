@@ -1,0 +1,4 @@
+application/cache
+application/configs/application.ini
+public/uploads
+public/tmp
